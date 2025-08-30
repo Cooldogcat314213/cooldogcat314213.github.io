@@ -137,7 +137,7 @@
       }
       keySpan.textContent = displayKey;
       revealIndex++;
-      setTimeout(typeEffect, 80); // faster reveal for premium feel
+      setTimeout(typeEffect, 20); // faster reveal for premium feel
     } else {
       keySpan.textContent = secureKey;
     }
