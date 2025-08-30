@@ -3,9 +3,10 @@ document.body.appendChild(canvas);
 canvas.style.position = "absolute";
 canvas.style.top = 0;
 canvas.style.left = 0;
-canvas.style.zIndex = 0; // below the card
+canvas.style.zIndex = 0; // behind the card
 const ctx = canvas.getContext("2d");
 
+// Resize canvas to window
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -13,23 +14,65 @@ function resize() {
 resize();
 window.addEventListener("resize", resize);
 
-const stars = Array.from({ length: 100 }, () => ({
+// Mouse position
+const mouse = { x: null, y: null };
+window.addEventListener("mousemove", (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+// Star setup
+const stars = Array.from({ length: 150 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
-  size: Math.random() * 2,
+  size: Math.random() * 2 + 1,
   speed: Math.random() * 0.5 + 0.2,
+  dx: 0,
+  dy: 0,
 }));
+
+const repulsionRadius = 100;
+const repulsionStrength = 3;
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "white";
+
   stars.forEach(star => {
+    // Vector from mouse to star
+    if (mouse.x !== null && mouse.y !== null) {
+      const dx = star.x - mouse.x;
+      const dy = star.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < repulsionRadius) {
+        // Repel star
+        const angle = Math.atan2(dy, dx);
+        const force = (repulsionRadius - dist) / repulsionRadius * repulsionStrength;
+        star.dx += Math.cos(angle) * force;
+        star.dy += Math.sin(angle) * force;
+      }
+    }
+
+    // Apply velocity & gravity (falling)
+    star.y += star.speed + star.dy;
+    star.x += star.dx;
+
+    // Slow down velocities over time (friction)
+    star.dx *= 0.95;
+    star.dy *= 0.95;
+
+    // Wrap around screen
+    if (star.y > canvas.height) star.y = 0;
+    if (star.x > canvas.width) star.x = 0;
+    if (star.x < 0) star.x = canvas.width;
+
+    // Draw star
     ctx.beginPath();
     ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
     ctx.fill();
-    star.y += star.speed;
-    if (star.y > canvas.height) star.y = 0;
   });
+
   requestAnimationFrame(draw);
 }
 
