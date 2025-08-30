@@ -7,7 +7,7 @@
     if (mainContent) {
       mainContent.innerHTML = `
         <div style="color:white; font-size:1.5rem; text-align:center; padding: 2rem;">
-          Please access this page through Linkvertise!
+          L dont try bypass it LOL 😝
         </div>
       `;
     }
