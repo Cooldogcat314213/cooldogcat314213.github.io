@@ -1,4 +1,4 @@
-/* Make background black and center content */
+/* Body stays the same */
 body {
   margin: 0;
   height: 100vh;
@@ -11,14 +11,32 @@ body {
   overflow: hidden;
 }
 
-/* White card in the middle */
+/* White card with modern styling */
 .card {
-  background: white;
+  position: relative;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
   color: black;
-  padding: 2rem 3rem;
-  border-radius: 16px;
+  padding: 2.5rem 4rem;
+  border-radius: 20px;
   font-size: 2rem;
   font-weight: bold;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  z-index: 1; /* Make sure it's above any effects */
+  text-align: center;
+
+  /* Soft 3D/glow effect */
+  box-shadow:
+    0 4px 15px rgba(255, 255, 255, 0.2),
+    0 8px 30px rgba(255, 255, 255, 0.1);
+
+  /* Optional subtle gradient border */
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Hover effect for interactivity */
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  transition: all 0.3s ease;
+  box-shadow:
+    0 8px 20px rgba(255, 255, 255, 0.3),
+    0 16px 50px rgba(255, 255, 255, 0.2);
 }
