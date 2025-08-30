@@ -1,4 +1,4 @@
-/* ---------- BODY ---------- */
+/* Body stays the same */
 body {
   margin: 0;
   height: 100vh;
@@ -11,10 +11,9 @@ body {
   overflow: hidden;
 }
 
-/* ---------- CARD ---------- */
+/* White card with modern styling */
 .card {
-  position: relative; /* needed for z-index */
-  z-index: 2;         /* above canvas */
+  position: relative;
   background: linear-gradient(145deg, #ffffff, #f0f0f0);
   color: black;
   padding: 2.5rem 4rem;
@@ -23,23 +22,21 @@ body {
   font-weight: bold;
   text-align: center;
 
-  /* soft 3D/glow */
+  /* Soft 3D/glow effect */
   box-shadow:
     0 4px 15px rgba(255, 255, 255, 0.2),
     0 8px 30px rgba(255, 255, 255, 0.1);
 
+  /* Optional subtle gradient border */
   border: 2px solid transparent;
   background-clip: padding-box;
-  transition: all 0.3s ease;
 }
 
 /* Hover effect for interactivity */
 .card:hover {
   transform: translateY(-5px) scale(1.02);
+  transition: all 0.3s ease;
   box-shadow:
     0 8px 20px rgba(255, 255, 255, 0.3),
     0 16px 50px rgba(255, 255, 255, 0.2);
 }
-
-/* ---------- OPTIONAL OTHER STYLES ---------- */
-/* Add any other buttons, links, or elements here */
