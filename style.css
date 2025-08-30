@@ -1,4 +1,4 @@
-/* Body stays the same */
+/* Body */
 body {
   margin: 0;
   height: 100vh;
@@ -11,9 +11,10 @@ body {
   overflow: hidden;
 }
 
-/* White card with modern styling */
+/* Card */
 .card {
   position: relative;
+  z-index: 2; /* Above canvas */
   background: linear-gradient(145deg, #ffffff, #f0f0f0);
   color: black;
   padding: 2.5rem 4rem;
@@ -21,22 +22,40 @@ body {
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
-
-  /* Soft 3D/glow effect */
   box-shadow:
     0 4px 15px rgba(255, 255, 255, 0.2),
     0 8px 30px rgba(255, 255, 255, 0.1);
-
-  /* Optional subtle gradient border */
   border: 2px solid transparent;
   background-clip: padding-box;
+  transition: all 0.3s ease;
 }
 
-/* Hover effect for interactivity */
+/* Card hover */
 .card:hover {
   transform: translateY(-5px) scale(1.02);
-  transition: all 0.3s ease;
   box-shadow:
     0 8px 20px rgba(255, 255, 255, 0.3),
     0 16px 50px rgba(255, 255, 255, 0.2);
+}
+
+/* Copy button inside card */
+#copy-btn {
+  position: relative;
+  z-index: 2;
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-family: monospace;
+  border: none;
+  border-radius: 10px;
+  background: #ffffff;
+  color: black;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#copy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 }
