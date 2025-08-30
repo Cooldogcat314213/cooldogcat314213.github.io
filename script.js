@@ -21,6 +21,7 @@
   canvas.style.top = 0;
   canvas.style.left = 0;
   canvas.style.zIndex = 0;
+  canvas.style.pointerEvents = "none"; // allow clicks to pass through
   const ctx = canvas.getContext("2d");
 
   function resize() {
@@ -86,6 +87,7 @@
   card.className = "card";
   card.style.boxShadow = "0 0 20px #00ffff, 0 0 40px #00ffff33, 0 0 60px #00ffff22";
   card.style.transition = "box-shadow 1s ease-in-out";
+  card.style.zIndex = 10;
   mainContent.appendChild(card);
 
   // Glow effect
@@ -140,7 +142,7 @@
       }
       keySpan.textContent = displayKey;
       revealIndex++;
-      setTimeout(typeEffect, 20);
+      setTimeout(typeEffect, 80);
     } else {
       keySpan.textContent = secureKey;
     }
