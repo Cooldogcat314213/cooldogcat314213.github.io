@@ -2,6 +2,7 @@
   const allowedRef = "linkvertise.com";
   const mainContent = document.getElementById("main-content");
 
+  // Stop if referrer is invalid
   if (!document.referrer.includes(allowedRef)) {
     if (mainContent) {
       mainContent.innerHTML = `
@@ -87,15 +88,18 @@
   card.style.transition = "box-shadow 1s ease-in-out";
   mainContent.appendChild(card);
 
+  // Glow effect
   setInterval(() => {
     card.style.boxShadow = card.style.boxShadow.includes("20px") 
       ? "0 0 30px #00ffff, 0 0 50px #00ffff33, 0 0 70px #00ffff22" 
       : "0 0 20px #00ffff, 0 0 40px #00ffff33, 0 0 60px #00ffff22";
   }, 1000);
 
+  // Key span
   const keySpan = document.createElement("span");
   card.appendChild(keySpan);
 
+  // Copy button
   const copyBtn = document.createElement("button");
   copyBtn.id = "copy-btn";
   copyBtn.textContent = "Copy";
@@ -114,7 +118,7 @@
       });
   });
 
-  // ---------- Locked/unlocked key reveal ----------
+  // Locked/unlocked key reveal
   let revealIndex = 0;
   function typeEffect() {
     if (revealIndex < secureKey.length) {
