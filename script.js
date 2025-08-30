@@ -105,18 +105,21 @@
   copyBtn.textContent = "Copy";
   card.appendChild(copyBtn);
 
-  // Copy functionality with floating "Copied!"
+  // Copy button functionality with floating "Copied!" toast
   copyBtn.addEventListener("click", () => {
+    if (!navigator.clipboard) return alert("Clipboard API not supported");
+
     navigator.clipboard.writeText(secureKey)
       .then(() => {
-        // floating copied text
         const toast = document.createElement("div");
         toast.className = "copied-toast";
         toast.textContent = "Copied!";
         document.body.appendChild(toast);
+
         const rect = copyBtn.getBoundingClientRect();
-        toast.style.left = `${rect.left + rect.width/2}px`;
-        toast.style.top = `${rect.top - 20}px`;
+        toast.style.left = `${rect.left + rect.width/2 - 20}px`;
+        toast.style.top = `${rect.top - 30}px`;
+
         setTimeout(() => document.body.removeChild(toast), 1200);
       })
       .catch(() => {
@@ -137,7 +140,7 @@
       }
       keySpan.textContent = displayKey;
       revealIndex++;
-      setTimeout(typeEffect, 20); // faster reveal for premium feel
+      setTimeout(typeEffect, 80);
     } else {
       keySpan.textContent = secureKey;
     }
