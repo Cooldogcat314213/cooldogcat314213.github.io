@@ -13,7 +13,6 @@ body {
   animation: gradientShift 20s ease infinite;
 }
 
-/* Subtle animated background gradient */
 @keyframes gradientShift {
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
@@ -38,7 +37,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem; /* spacing between key and button */
+  gap: 1rem;
+  z-index: 10; /* ensure above canvas */
 }
 
 /* Hover effect for card */
@@ -50,20 +50,22 @@ body {
     0 16px 50px rgba(255, 255, 255, 0.2);
 }
 
-/* Copy button styling */
+/* Copy button: black/grey premium look */
 .card button#copy-btn {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   cursor: pointer;
   border: none;
   border-radius: 8px;
-  background: #00ffff;
-  color: black;
+  background: #333;
+  color: #eee;
   font-weight: bold;
   transition: all 0.2s ease;
+  z-index: 10;
+  position: relative;
 }
 .card button#copy-btn:hover {
-  background: #00cccc;
+  background: #555;
 }
 
 /* Floating copied text */
