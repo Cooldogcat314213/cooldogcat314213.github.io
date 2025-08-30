@@ -140,7 +140,7 @@
       }
       keySpan.textContent = displayKey;
       revealIndex++;
-      setTimeout(typeEffect, 80);
+      setTimeout(typeEffect, 20);
     } else {
       keySpan.textContent = secureKey;
     }
