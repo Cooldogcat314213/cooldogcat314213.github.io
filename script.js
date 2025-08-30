@@ -33,7 +33,7 @@ const stars = Array.from({ length: 150 }, () => ({
 }));
 
 const repulsionRadius = 100;
-const repulsionStrength = 3;
+const repulsionStrength = 1;
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
