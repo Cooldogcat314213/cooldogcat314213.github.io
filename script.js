@@ -1,9 +1,7 @@
-// ---------- Linkvertise Referrer Check ----------
 (function() {
   const allowedRef = "linkvertise.com";
   const mainContent = document.getElementById("main-content");
 
-  // Stop if referrer is invalid
   if (!document.referrer.includes(allowedRef)) {
     if (mainContent) {
       mainContent.innerHTML = `
@@ -21,7 +19,7 @@
   canvas.style.position = "absolute";
   canvas.style.top = 0;
   canvas.style.left = 0;
-  canvas.style.zIndex = 0; // behind the card
+  canvas.style.zIndex = 0;
   const ctx = canvas.getContext("2d");
 
   function resize() {
@@ -52,7 +50,6 @@
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
-
     stars.forEach(star => {
       if (mouse.x !== null && mouse.y !== null) {
         const dx = star.x - mouse.x;
@@ -65,82 +62,75 @@
           star.dy += Math.sin(angle) * force;
         }
       }
-
       star.y += star.speed + star.dy;
       star.x += star.dx;
       star.dx *= 0.95;
       star.dy *= 0.95;
-
       if (star.y > canvas.height) star.y = 0;
       if (star.x > canvas.width) star.x = 0;
       if (star.x < 0) star.x = canvas.width;
-
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.size, 0, Math.PI*2);
       ctx.fill();
     });
-
     requestAnimationFrame(draw);
   }
-
   draw();
 
-  // ---------- Secure Key (obfuscated reveal) ----------
-  const secureKey = "!2Vu>_cEaL"; // your fixed key
+  // ---------- Premium Card ----------
+  const secureKey = "!2Vu>_cEaL";
   const obfuscChars = "!@#$%^&*?<>0123456789";
 
-  if (mainContent) {
-    const card = document.createElement("div");
-    card.className = "card";
-    mainContent.appendChild(card);
+  const card = document.createElement("div");
+  card.className = "card";
+  card.style.boxShadow = "0 0 20px #00ffff, 0 0 40px #00ffff33, 0 0 60px #00ffff22";
+  card.style.transition = "box-shadow 1s ease-in-out";
+  mainContent.appendChild(card);
 
-    // Glow effect
-    card.style.boxShadow = "0 0 20px #00ffff, 0 0 40px #00ffff33, 0 0 60px #00ffff22";
-    card.style.transition = "box-shadow 1s ease-in-out";
-    setInterval(() => {
-      card.style.boxShadow = card.style.boxShadow.includes("20px") 
-        ? "0 0 30px #00ffff, 0 0 50px #00ffff33, 0 0 70px #00ffff22" 
-        : "0 0 20px #00ffff, 0 0 40px #00ffff33, 0 0 60px #00ffff22";
-    }, 1000);
+  setInterval(() => {
+    card.style.boxShadow = card.style.boxShadow.includes("20px") 
+      ? "0 0 30px #00ffff, 0 0 50px #00ffff33, 0 0 70px #00ffff22" 
+      : "0 0 20px #00ffff, 0 0 40px #00ffff33, 0 0 60px #00ffff22";
+  }, 1000);
 
-    // Locked/unlocked effect
-    let revealed = false;
-    let displayKey = Array(secureKey.length).fill("");
-    let revealIndex = 0;
+  const keySpan = document.createElement("span");
+  card.appendChild(keySpan);
 
-    function typeEffect() {
-      if (revealIndex < secureKey.length) {
-        for (let i = 0; i <= revealIndex; i++) {
-          displayKey[i] = i === revealIndex 
-            ? obfuscChars.charAt(Math.floor(Math.random() * obfuscChars.length)) 
-            : secureKey[i];
-        }
-        card.innerHTML = displayKey.join("") + `<button id="copy-btn">Copy</button>`;
-        revealIndex++;
-        setTimeout(typeEffect, 100); // speed of reveal
-      } else {
-        card.innerHTML = secureKey + `<button id="copy-btn">Copy</button>`;
-        revealed = true;
-        setupCopyButton();
-      }
-    }
+  const copyBtn = document.createElement("button");
+  copyBtn.id = "copy-btn";
+  copyBtn.textContent = "Copy";
+  card.appendChild(copyBtn);
 
-    typeEffect();
-
-    // Copy button setup
-    function setupCopyButton() {
-      const copyBtn = document.getElementById("copy-btn");
-      copyBtn.addEventListener("click", () => {
-        navigator.clipboard.writeText(secureKey)
-          .then(() => {
-            copyBtn.textContent = "Copied!";
-            setTimeout(() => copyBtn.textContent = "Copy", 1500);
-          })
-          .catch(() => {
-            copyBtn.textContent = "Failed!";
-            setTimeout(() => copyBtn.textContent = "Copy", 1500);
-          });
+  // Copy functionality
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(secureKey)
+      .then(() => {
+        copyBtn.textContent = "Copied!";
+        setTimeout(() => copyBtn.textContent = "Copy", 1500);
+      })
+      .catch(() => {
+        copyBtn.textContent = "Failed!";
+        setTimeout(() => copyBtn.textContent = "Copy", 1500);
       });
+  });
+
+  // ---------- Locked/unlocked key reveal ----------
+  let revealIndex = 0;
+  function typeEffect() {
+    if (revealIndex < secureKey.length) {
+      let displayKey = "";
+      for (let i = 0; i <= revealIndex; i++) {
+        displayKey += i === revealIndex 
+          ? obfuscChars.charAt(Math.floor(Math.random() * obfuscChars.length)) 
+          : secureKey[i];
+      }
+      keySpan.textContent = displayKey;
+      revealIndex++;
+      setTimeout(typeEffect, 100);
+    } else {
+      keySpan.textContent = secureKey;
     }
   }
+  typeEffect();
+
 })();
