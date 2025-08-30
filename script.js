@@ -7,7 +7,7 @@
     if (mainContent) {
       mainContent.innerHTML = `
         <div style="color:white; font-size:1.5rem; text-align:center; padding: 2rem;">
-          L dont try bypass it LOL 😝
+          L why did you try bypass it 😝
         </div>
       `;
     }
@@ -36,7 +36,7 @@
     mouse.y = e.clientY;
   });
 
-  const stars = Array.from({ length: 150 }, () => ({
+  const stars = Array.from({ length: 100 }, () => ({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
     size: Math.random() * 2 + 1,
@@ -105,12 +105,19 @@
   copyBtn.textContent = "Copy";
   card.appendChild(copyBtn);
 
-  // Copy functionality
+  // Copy functionality with floating "Copied!"
   copyBtn.addEventListener("click", () => {
     navigator.clipboard.writeText(secureKey)
       .then(() => {
-        copyBtn.textContent = "Copied!";
-        setTimeout(() => copyBtn.textContent = "Copy", 1500);
+        // floating copied text
+        const toast = document.createElement("div");
+        toast.className = "copied-toast";
+        toast.textContent = "Copied!";
+        document.body.appendChild(toast);
+        const rect = copyBtn.getBoundingClientRect();
+        toast.style.left = `${rect.left + rect.width/2}px`;
+        toast.style.top = `${rect.top - 20}px`;
+        setTimeout(() => document.body.removeChild(toast), 1200);
       })
       .catch(() => {
         copyBtn.textContent = "Failed!";
@@ -130,7 +137,7 @@
       }
       keySpan.textContent = displayKey;
       revealIndex++;
-      setTimeout(typeEffect, 100);
+      setTimeout(typeEffect, 80); // faster reveal for premium feel
     } else {
       keySpan.textContent = secureKey;
     }
