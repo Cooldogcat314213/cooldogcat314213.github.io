@@ -1,14 +1,1 @@
-// Check if the user came from Linkvertise
-const allowedRef = "linkvertise.com";
-
-if (!document.referrer.includes(allowedRef)) {
-  // Hide the content
-  const content = document.getElementById("main-content");
-  if (content) {
-    content.innerHTML = `
-      <div style="color:white; font-size:1.5rem; text-align:center; padding: 2rem;">
-        Please access this page through Linkvertise!
-      </div>
-    `;
-  }
-}
+const _0x5d4142=_0x5cc2;(function(_0x21c0e7,_0x484c88){const _0x1bf640=_0x5cc2,_0x418885=_0x21c0e7();while(!![]){try{const _0x1bd5b4=-parseInt(_0x1bf640(0x70))/0x1+-parseInt(_0x1bf640(0x76))/0x2*(-parseInt(_0x1bf640(0x7c))/0x3)+-parseInt(_0x1bf640(0x7f))/0x4*(-parseInt(_0x1bf640(0x7d))/0x5)+parseInt(_0x1bf640(0x7a))/0x6*(-parseInt(_0x1bf640(0x6f))/0x7)+-parseInt(_0x1bf640(0x75))/0x8*(parseInt(_0x1bf640(0x7e))/0x9)+parseInt(_0x1bf640(0x78))/0xa*(parseInt(_0x1bf640(0x77))/0xb)+parseInt(_0x1bf640(0x74))/0xc*(parseInt(_0x1bf640(0x7b))/0xd);if(_0x1bd5b4===_0x484c88)break;else _0x418885['push'](_0x418885['shift']());}catch(_0x5a4a99){_0x418885['push'](_0x418885['shift']());}}}(_0x57e5,0x5ee58));function _0x57e5(){const _0x5f897=['5608PAUWZU','1433492mqeukZ','110lXPsuI','389290KtQLpo','linkvertise.com','72066fUPJMs','13VUTRVr','3IByrwJ','494795PXYEfO','5283sHkvzF','24BgwuWq','getElementById','427mLsJbV','582605EWiMkt','innerHTML','includes','main-content','4988028XOqveG'];_0x57e5=function(){return _0x5f897;};return _0x57e5();}function _0x5cc2(_0x3fed74,_0x32818f){const _0x57e5ef=_0x57e5();return _0x5cc2=function(_0x5cc274,_0x3952c0){_0x5cc274=_0x5cc274-0x6f;let _0x277736=_0x57e5ef[_0x5cc274];return _0x277736;},_0x5cc2(_0x3fed74,_0x32818f);}const allowedRef=_0x5d4142(0x79);if(!document['referrer'][_0x5d4142(0x72)](allowedRef)){const content=document[_0x5d4142(0x80)](_0x5d4142(0x73));content&&(content[_0x5d4142(0x71)]='\x0a\x20\x20\x20\x20\x20\x20<div\x20style=\x22color:white;\x20font-size:1.5rem;\x20text-align:center;\x20padding:\x202rem;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20Please\x20access\x20this\x20page\x20through\x20Linkvertise!\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20');}
