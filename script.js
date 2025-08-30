@@ -49,8 +49,13 @@
   const repulsionRadius = 100;
   const repulsionStrength = 3;
 
-  function draw() {
+  function drawStars() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw watermark first
+    drawWatermark();
+
+    // Draw stars
     ctx.fillStyle = "white";
     stars.forEach(star => {
       if (mouse.x !== null && mouse.y !== null) {
@@ -75,9 +80,35 @@
       ctx.arc(star.x, star.y, star.size, 0, Math.PI*2);
       ctx.fill();
     });
-    requestAnimationFrame(draw);
+    requestAnimationFrame(drawStars);
   }
-  draw();
+
+  // ---------- Watermark ----------
+  const watermark = {
+    text: "ORIGINAL OWNER - mr_i_want_weapon ON DISCORD",
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    dx: (Math.random() - 0.5) * 0.5, // slow movement
+    dy: (Math.random() - 0.5) * 0.5
+  };
+
+  function drawWatermark() {
+    ctx.save();
+    ctx.font = "24px monospace";
+    ctx.fillStyle = "rgba(255,255,255,0.075)"; // 7.5% opacity
+    ctx.fillText(watermark.text, watermark.x, watermark.y);
+    ctx.restore();
+
+    // Move watermark slowly
+    watermark.x += watermark.dx;
+    watermark.y += watermark.dy;
+
+    // Bounce off edges
+    if (watermark.x < 0 || watermark.x + ctx.measureText(watermark.text).width > canvas.width) watermark.dx *= -1;
+    if (watermark.y < 20 || watermark.y > canvas.height) watermark.dy *= -1;
+  }
+
+  drawStars();
 
   // ---------- Premium Card ----------
   const secureKey = "!2Vu>_cEaL";
