@@ -3,7 +3,7 @@
   const allowedRef = "linkvertise.com";
   const mainContent = document.getElementById("main-content");
 
-  // If referrer is invalid, immediately show warning and do not render card or button
+  // Stop here if the user didn't come through Linkvertise
   if (!document.referrer.includes(allowedRef)) {
     if (mainContent) {
       mainContent.innerHTML = `
@@ -12,7 +12,7 @@
         </div>
       `;
     }
-    return; // stop script execution here
+    return;
   }
 
   // ---------- Canvas and Stars ----------
@@ -85,14 +85,20 @@
 
   draw();
 
-  // ---------- Copy to Clipboard ----------
-  const copyBtn = document.getElementById("copy-btn");
-  const card = document.querySelector(".card");
+  // ---------- Fixed Secure Key ----------
+  const secureKey = atob("IXJWdT5fY0VhTA==");
 
-  if (copyBtn && card) {
+  // ---------- Create Card Dynamically ----------
+  if (mainContent) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = secureKey + `<button id="copy-btn">Copy</button>`;
+    mainContent.appendChild(card);
+
+    // Copy button
+    const copyBtn = document.getElementById("copy-btn");
     copyBtn.addEventListener("click", () => {
-      const textToCopy = card.textContent.replace("Copy","").trim();
-      navigator.clipboard.writeText(textToCopy)
+      navigator.clipboard.writeText(secureKey)
         .then(() => {
           copyBtn.textContent = "Copied!";
           setTimeout(() => copyBtn.textContent = "Copy", 1500);
