@@ -33,7 +33,7 @@ const stars = Array.from({ length: 150 }, () => ({
 }));
 
 const repulsionRadius = 100;
-const repulsionStrength = 1;
+const repulsionStrength = 3;
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -83,7 +83,7 @@ const card = document.querySelector(".card");
 
 if (copyBtn && card) {
   copyBtn.addEventListener("click", () => {
-    const textToCopy = card.textContent;
+    const textToCopy = card.textContent.replace("Copy","").trim();
     navigator.clipboard.writeText(textToCopy)
       .then(() => {
         copyBtn.textContent = "Copied!";
@@ -95,3 +95,24 @@ if (copyBtn && card) {
       });
   });
 }
+
+// ---------- Linkvertise Referrer Check ----------
+(function() {
+  const allowedRef = "linkvertise.com";
+  const mainContent = document.getElementById("main-content");
+
+  if (!document.referrer.includes(allowedRef)) {
+    if (mainContent) {
+      mainContent.style.opacity = "0";
+      mainContent.style.transition = "opacity 0.5s ease";
+      setTimeout(() => {
+        mainContent.innerHTML = `
+          <div style="color:white; font-size:1.5rem; text-align:center; padding: 2rem;">
+            Please access this page through Linkvertise!
+          </div>
+        `;
+        mainContent.style.opacity = "1";
+      }, 500);
+    }
+  }
+})();
