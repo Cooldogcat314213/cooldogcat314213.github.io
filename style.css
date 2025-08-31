@@ -27,6 +27,7 @@ body {
     0 8px 30px rgba(255, 255, 255, 0.1);
   border: 2px solid transparent;
   background-clip: padding-box;
+  z-index: 2;
 }
 
 /* Copy button */
@@ -41,6 +42,7 @@ body {
   cursor: pointer;
   font-size: 1rem;
   transition: all 0.2s ease-in-out;
+  z-index: 3;
 }
 
 #copy-btn:hover {
@@ -51,16 +53,8 @@ body {
 /* Watermark floating text */
 #watermark {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   font-size: 2rem;
   color: rgba(255, 255, 255, 0.15);
   pointer-events: none;
-  animation: float 8s ease-in-out infinite alternate;
-}
-
-@keyframes float {
-  from { transform: translate(-50%, -50%) translateY(-20px); }
-  to { transform: translate(-50%, -50%) translateY(20px); }
+  z-index: 1;
 }
