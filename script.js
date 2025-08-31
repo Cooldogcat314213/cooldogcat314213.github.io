@@ -1,13 +1,12 @@
-// === Background Stars ===
+// === Canvas background (stars) ===
 const canvas = document.createElement("canvas");
 document.body.appendChild(canvas);
 canvas.style.position = "absolute";
 canvas.style.top = 0;
 canvas.style.left = 0;
-canvas.style.zIndex = 0; // behind the card
+canvas.style.zIndex = 0; // behind card
 const ctx = canvas.getContext("2d");
 
-// Resize canvas
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -15,14 +14,12 @@ function resize() {
 resize();
 window.addEventListener("resize", resize);
 
-// Mouse
 const mouse = { x: null, y: null };
 window.addEventListener("mousemove", (e) => {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
 });
 
-// Stars
 const stars = Array.from({ length: 150 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
@@ -39,7 +36,7 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "white";
 
-  stars.forEach(star => {
+  stars.forEach((star) => {
     if (mouse.x !== null && mouse.y !== null) {
       const dx = star.x - mouse.x;
       const dy = star.y - mouse.y;
@@ -47,7 +44,8 @@ function draw() {
 
       if (dist < repulsionRadius) {
         const angle = Math.atan2(dy, dx);
-        const force = (repulsionRadius - dist) / repulsionRadius * repulsionStrength;
+        const force =
+          ((repulsionRadius - dist) / repulsionRadius) * repulsionStrength;
         star.dx += Math.cos(angle) * force;
         star.dy += Math.sin(angle) * force;
       }
@@ -72,22 +70,48 @@ function draw() {
 }
 draw();
 
-// === Secure Key System ===
-const card = document.getElementById("card");
-const secureKey = "!2Vu>_cEaL"; // The key (not in HTML)
+// === Secure key reveal ===
+const card = document.querySelector(".card");
+const secureKey = "!2Vu>_cEaL";
 
-// Only show key if came from linkvertise
 if (document.referrer.includes("linkvertise.com")) {
   card.innerHTML = `
-    ${secureKey}
+    <span id="key-text">${secureKey}</span>
     <button id="copy-btn">Copy</button>
   `;
 
   document.getElementById("copy-btn").addEventListener("click", () => {
     navigator.clipboard.writeText(secureKey).then(() => {
-      alert("Copied to clipboard!");
+      const btn = document.getElementById("copy-btn");
+      btn.textContent = "Copied!";
+      setTimeout(() => (btn.textContent = "Copy"), 1500);
     });
   });
 } else {
   card.textContent = "L why did you try bypass it 😝";
 }
+
+// === Floating Watermark ===
+const watermark = document.createElement("div");
+watermark.textContent = "ORIGINAL OWNER - mr_i_want_weapon ON DISCORD";
+watermark.style.position = "absolute";
+watermark.style.top = "50%";
+watermark.style.left = "50%";
+watermark.style.transform = "translate(-50%, -50%)";
+watermark.style.fontSize = "2rem";
+watermark.style.fontWeight = "bold";
+watermark.style.color = "rgba(255,255,255,0.25)";
+watermark.style.pointerEvents = "none";
+watermark.style.zIndex = 10;
+document.body.appendChild(watermark);
+
+// Animate floating watermark
+let angle = 0;
+function animateWatermark() {
+  angle += 0.01;
+  const x = Math.sin(angle) * 50;
+  const y = Math.cos(angle) * 30;
+  watermark.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+  requestAnimationFrame(animateWatermark);
+}
+animateWatermark();
