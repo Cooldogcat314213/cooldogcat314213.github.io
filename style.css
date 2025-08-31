@@ -1,3 +1,4 @@
+/* Body stays the same */
 body {
   margin: 0;
   height: 100vh;
@@ -8,15 +9,6 @@ body {
   font-family: monospace;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(120deg, #0a0a0a, #111111, #0a0a0a);
-  background-size: 600% 600%;
-  animation: gradientShift 20s ease infinite;
-}
-
-@keyframes gradientShift {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
 }
 
 /* White card with modern styling */
@@ -29,55 +21,63 @@ body {
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
+  z-index: 1;
+
+  /* Soft 3D/glow effect */
   box-shadow:
     0 4px 15px rgba(255, 255, 255, 0.2),
     0 8px 30px rgba(255, 255, 255, 0.1);
+
   border: 2px solid transparent;
   background-clip: padding-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  z-index: 10; /* ensure above canvas */
+  transition: all 0.3s ease;
 }
 
-/* Hover effect for card */
 .card:hover {
   transform: translateY(-5px) scale(1.02);
-  transition: all 0.3s ease;
   box-shadow:
     0 8px 20px rgba(255, 255, 255, 0.3),
     0 16px 50px rgba(255, 255, 255, 0.2);
 }
 
-/* Copy button: black/grey premium look */
-.card button#copy-btn {
-  padding: 0.5rem 1rem;
+/* Copy button styling */
+#copy-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1.2rem;
   font-size: 1rem;
-  cursor: pointer;
-  border: none;
-  border-radius: 8px;
-  background: #333;
-  color: #eee;
   font-weight: bold;
-  transition: all 0.2s ease;
-  z-index: 10;
-  position: relative;
-}
-.card button#copy-btn:hover {
-  background: #555;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #333, #555);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Floating copied text */
-.copied-toast {
-  position: absolute;
-  color: #00ffff;
-  font-weight: bold;
-  opacity: 1;
-  animation: floatUp 1.2s forwards;
-  pointer-events: none;
+#copy-btn:hover {
+  background: linear-gradient(145deg, #555, #777);
+  transform: scale(1.05);
 }
-@keyframes floatUp {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-40px); opacity: 0; }
+
+/* Floating watermark */
+#watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.25);
+  z-index: 0;
+  animation: float 6s ease-in-out infinite alternate;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+@keyframes float {
+  from { transform: translate(-50%, -55%); }
+  to { transform: translate(-50%, -45%); }
 }
