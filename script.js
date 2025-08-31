@@ -72,14 +72,14 @@ function draw() {
       star.history.shift();
     }
 
-    // Draw trail
+    // Draw trail (blue to transparent)
     if (star.history.length > 1) {
       ctx.beginPath();
       ctx.moveTo(star.x, star.y);
       for (let i = star.history.length - 1; i >= 0; i--) {
         const pos = star.history[i];
         const alpha = i / star.history.length;
-        ctx.strokeStyle = `rgba(0, 100, 255, ${alpha})`;
+        ctx.strokeStyle = `rgba(0, 100, 255, ${alpha * 0.7})`;
         ctx.lineTo(pos.x, pos.y);
       }
       ctx.stroke();
@@ -119,3 +119,43 @@ if (!allowedReferrers.some(site => ref.includes(site))) {
     card.innerHTML = "L why did you try bypass it 😝";
   }
 }
+
+// Floating watermark avoiding card
+const watermark = document.getElementById("watermark");
+const card = document.querySelector(".card");
+
+let wmX = window.innerWidth / 2;
+let wmY = window.innerHeight / 4;
+let vx = 1.2;
+let vy = 1;
+
+function moveWatermark() {
+  const cardRect = card.getBoundingClientRect();
+  const wmRect = watermark.getBoundingClientRect();
+
+  wmX += vx;
+  wmY += vy;
+
+  // Bounce on edges
+  if (wmX < 0 || wmX + wmRect.width > window.innerWidth) vx *= -1;
+  if (wmY < 0 || wmY + wmRect.height > window.innerHeight) vy *= -1;
+
+  // Avoid overlapping card
+  if (
+    wmX < cardRect.right &&
+    wmX + wmRect.width > cardRect.left &&
+    wmY < cardRect.bottom &&
+    wmY + wmRect.height > cardRect.top
+  ) {
+    vx *= -1;
+    vy *= -1;
+    wmX += vx * 10;
+    wmY += vy * 10;
+  }
+
+  watermark.style.left = wmX + "px";
+  watermark.style.top = wmY + "px";
+
+  requestAnimationFrame(moveWatermark);
+}
+moveWatermark();
