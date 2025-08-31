@@ -1,183 +1,93 @@
-(function() {
-  const allowedRef = "linkvertise.com";
-  const mainContent = document.getElementById("main-content");
+// === Background Stars ===
+const canvas = document.createElement("canvas");
+document.body.appendChild(canvas);
+canvas.style.position = "absolute";
+canvas.style.top = 0;
+canvas.style.left = 0;
+canvas.style.zIndex = 0; // behind the card
+const ctx = canvas.getContext("2d");
 
-  // Stop if referrer is invalid
-  if (!document.referrer.includes(allowedRef)) {
-    if (mainContent) {
-      mainContent.innerHTML = `
-        <div style="color:white; font-size:1.5rem; text-align:center; padding: 2rem;">
-          L why did you try bypass it 😝
-        </div>
-      `;
+// Resize canvas
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+// Mouse
+const mouse = { x: null, y: null };
+window.addEventListener("mousemove", (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+// Stars
+const stars = Array.from({ length: 150 }, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  size: Math.random() * 2 + 1,
+  speed: Math.random() * 0.5 + 0.2,
+  dx: 0,
+  dy: 0,
+}));
+
+const repulsionRadius = 100;
+const repulsionStrength = 3;
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+
+  stars.forEach(star => {
+    if (mouse.x !== null && mouse.y !== null) {
+      const dx = star.x - mouse.x;
+      const dy = star.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < repulsionRadius) {
+        const angle = Math.atan2(dy, dx);
+        const force = (repulsionRadius - dist) / repulsionRadius * repulsionStrength;
+        star.dx += Math.cos(angle) * force;
+        star.dy += Math.sin(angle) * force;
+      }
     }
-    return;
-  }
 
-  // ---------- Canvas and Stars ----------
-  const canvas = document.createElement("canvas");
-  document.body.appendChild(canvas);
-  canvas.style.position = "absolute";
-  canvas.style.top = 0;
-  canvas.style.left = 0;
-  canvas.style.zIndex = 0;
-  canvas.style.pointerEvents = "none"; // allow clicks to pass through
-  const ctx = canvas.getContext("2d");
+    star.y += star.speed + star.dy;
+    star.x += star.dx;
 
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener("resize", resize);
+    star.dx *= 0.95;
+    star.dy *= 0.95;
 
-  const mouse = { x: null, y: null };
-  window.addEventListener("mousemove", (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
+    if (star.y > canvas.height) star.y = 0;
+    if (star.x > canvas.width) star.x = 0;
+    if (star.x < 0) star.x = canvas.width;
+
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+    ctx.fill();
   });
 
-  const stars = Array.from({ length: 100 }, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    size: Math.random() * 2 + 1,
-    speed: Math.random() * 0.5 + 0.2,
-    dx: 0,
-    dy: 0,
-  }));
+  requestAnimationFrame(draw);
+}
+draw();
 
-  const repulsionRadius = 100;
-  const repulsionStrength = 3;
+// === Secure Key System ===
+const card = document.getElementById("card");
+const secureKey = "!2Vu>_cEaL"; // The key (not in HTML)
 
-  function drawStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Only show key if came from linkvertise
+if (document.referrer.includes("linkvertise.com")) {
+  card.innerHTML = `
+    ${secureKey}
+    <button id="copy-btn">Copy</button>
+  `;
 
-    // Draw watermark first
-    drawWatermark();
-
-    // Draw stars
-    ctx.fillStyle = "white";
-    stars.forEach(star => {
-      if (mouse.x !== null && mouse.y !== null) {
-        const dx = star.x - mouse.x;
-        const dy = star.y - mouse.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < repulsionRadius) {
-          const angle = Math.atan2(dy, dx);
-          const force = (repulsionRadius - dist)/repulsionRadius * repulsionStrength;
-          star.dx += Math.cos(angle) * force;
-          star.dy += Math.sin(angle) * force;
-        }
-      }
-      star.y += star.speed + star.dy;
-      star.x += star.dx;
-      star.dx *= 0.95;
-      star.dy *= 0.95;
-      if (star.y > canvas.height) star.y = 0;
-      if (star.x > canvas.width) star.x = 0;
-      if (star.x < 0) star.x = canvas.width;
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.size, 0, Math.PI*2);
-      ctx.fill();
+  document.getElementById("copy-btn").addEventListener("click", () => {
+    navigator.clipboard.writeText(secureKey).then(() => {
+      alert("Copied to clipboard!");
     });
-    requestAnimationFrame(drawStars);
-  }
-
-  // ---------- Watermark ----------
-  const watermark = {
-    text: "ORIGINAL OWNER - mr_i_want_weapon ON DISCORD",
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-    dx: (Math.random() - 0.5) * 0.5, // slow movement
-    dy: (Math.random() - 0.5) * 0.5
-  };
-
-  function drawWatermark() {
-    ctx.save();
-    ctx.font = "24px monospace";
-    ctx.fillStyle = "rgba(255,255,255,0.075)"; // 7.5% opacity
-    ctx.fillText(watermark.text, watermark.x, watermark.y);
-    ctx.restore();
-
-    // Move watermark slowly
-    watermark.x += watermark.dx;
-    watermark.y += watermark.dy;
-
-    // Bounce off edges
-    if (watermark.x < 0 || watermark.x + ctx.measureText(watermark.text).width > canvas.width) watermark.dx *= -1;
-    if (watermark.y < 20 || watermark.y > canvas.height) watermark.dy *= -1;
-  }
-
-  drawStars();
-
-  // ---------- Premium Card ----------
-  const secureKey = "!2Vu>_cEaL";
-  const obfuscChars = "!@#$%^&*?<>0123456789";
-
-  const card = document.createElement("div");
-  card.className = "card";
-  card.style.boxShadow = "0 0 20px #00ffff, 0 0 40px #00ffff33, 0 0 60px #00ffff22";
-  card.style.transition = "box-shadow 1s ease-in-out";
-  card.style.zIndex = 10;
-  mainContent.appendChild(card);
-
-  // Glow effect
-  setInterval(() => {
-    card.style.boxShadow = card.style.boxShadow.includes("20px") 
-      ? "0 0 30px #00ffff, 0 0 50px #00ffff33, 0 0 70px #00ffff22" 
-      : "0 0 20px #00ffff, 0 0 40px #00ffff33, 0 0 60px #00ffff22";
-  }, 1000);
-
-  // Key span
-  const keySpan = document.createElement("span");
-  card.appendChild(keySpan);
-
-  // Copy button
-  const copyBtn = document.createElement("button");
-  copyBtn.id = "copy-btn";
-  copyBtn.textContent = "Copy";
-  card.appendChild(copyBtn);
-
-  // Copy button functionality with floating "Copied!" toast
-  copyBtn.addEventListener("click", () => {
-    if (!navigator.clipboard) return alert("Clipboard API not supported");
-
-    navigator.clipboard.writeText(secureKey)
-      .then(() => {
-        const toast = document.createElement("div");
-        toast.className = "copied-toast";
-        toast.textContent = "Copied!";
-        document.body.appendChild(toast);
-
-        const rect = copyBtn.getBoundingClientRect();
-        toast.style.left = `${rect.left + rect.width/2 - 20}px`;
-        toast.style.top = `${rect.top - 30}px`;
-
-        setTimeout(() => document.body.removeChild(toast), 1200);
-      })
-      .catch(() => {
-        copyBtn.textContent = "Failed!";
-        setTimeout(() => copyBtn.textContent = "Copy", 1500);
-      });
   });
-
-  // Locked/unlocked key reveal
-  let revealIndex = 0;
-  function typeEffect() {
-    if (revealIndex < secureKey.length) {
-      let displayKey = "";
-      for (let i = 0; i <= revealIndex; i++) {
-        displayKey += i === revealIndex 
-          ? obfuscChars.charAt(Math.floor(Math.random() * obfuscChars.length)) 
-          : secureKey[i];
-      }
-      keySpan.textContent = displayKey;
-      revealIndex++;
-      setTimeout(typeEffect, 80);
-    } else {
-      keySpan.textContent = secureKey;
-    }
-  }
-  typeEffect();
-
-})();
+} else {
+  card.textContent = "L why did you try bypass it 😝";
+}
