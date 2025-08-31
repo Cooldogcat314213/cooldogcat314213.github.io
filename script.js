@@ -24,7 +24,7 @@ const stars = Array.from({ length: 150 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
   size: Math.random() * 2 + 1,
-  speed: Math.random() * 0.5 + 0.2,
+  speed: Math.random() * 0.2 + 0.05, // slower stars
   dx: 0,
   dy: 0,
 }));
@@ -33,7 +33,13 @@ const repulsionRadius = 100;
 const repulsionStrength = 3;
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Draw semi-transparent gradient background for trails
+  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  gradient.addColorStop(0, "rgba(10, 10, 40, 0.25)"); // dark blue
+  gradient.addColorStop(1, "rgba(0, 0, 0, 0.25)"); // black
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
   ctx.fillStyle = "white";
 
   stars.forEach((star) => {
