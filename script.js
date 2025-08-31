@@ -13,19 +13,17 @@ function resize() {
 resize();
 window.addEventListener("resize", resize);
 
-// Mouse position
 const mouse = { x: null, y: null };
 window.addEventListener("mousemove", (e) => {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
 });
 
-// Star setup with history for trails
 const stars = Array.from({ length: 100 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
   size: Math.random() * 2 + 1,
-  speed: Math.random() * 0.3 + 0.1, // slowed down
+  speed: Math.random() * 0.3 + 0.1,
   dx: 0,
   dy: 0,
   history: []
@@ -35,16 +33,19 @@ const repulsionRadius = 100;
 const repulsionStrength = 3;
 
 function draw() {
-  ctx.fillStyle = "black";
+  // Gradient background for premium effect
+  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  gradient.addColorStop(0, "rgba(10, 10, 40, 1)"); // dark blue
+  gradient.addColorStop(1, "rgba(0,0,0,1)"); // black
+  ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   stars.forEach(star => {
-    // Repulsion from mouse
+    // Mouse repulsion
     if (mouse.x !== null && mouse.y !== null) {
       const dx = star.x - mouse.x;
       const dy = star.y - mouse.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-
       if (dist < repulsionRadius) {
         const angle = Math.atan2(dy, dx);
         const force = (repulsionRadius - dist) / repulsionRadius * repulsionStrength;
@@ -54,8 +55,8 @@ function draw() {
     }
 
     // Move star
-    star.y += star.speed + star.dy;
     star.x += star.dx;
+    star.y += star.speed + star.dy;
 
     // Friction
     star.dx *= 0.95;
@@ -66,13 +67,10 @@ function draw() {
     if (star.x > canvas.width) star.x = 0;
     if (star.x < 0) star.x = canvas.width;
 
-    // Save history for trails
+    // Trails
     star.history.push({ x: star.x, y: star.y });
-    if (star.history.length > 15) {
-      star.history.shift();
-    }
+    if (star.history.length > 15) star.history.shift();
 
-    // Draw trail (blue to transparent)
     if (star.history.length > 1) {
       ctx.beginPath();
       ctx.moveTo(star.x, star.y);
@@ -85,10 +83,10 @@ function draw() {
       ctx.stroke();
     }
 
-    // Draw star itself
+    // Draw star
     ctx.fillStyle = "white";
     ctx.beginPath();
-    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+    ctx.arc(star.x, star.y, star.size, 0, Math.PI*2);
     ctx.fill();
   });
 
@@ -96,34 +94,29 @@ function draw() {
 }
 draw();
 
-// Copy button functionality
-const copyBtn = document.getElementById("copy-btn");
-const keyText = document.getElementById("key-text");
+// Copy button and key
+const card = document.querySelector(".card");
+const secureKey = "!2Vu>_cEaL";
 
-if (copyBtn && keyText) {
-  copyBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(keyText.textContent).then(() => {
-      copyBtn.textContent = "Copied!";
-      setTimeout(() => (copyBtn.textContent = "Copy"), 2000);
+if (document.referrer.includes("linkvertise.com")) {
+  card.innerHTML = `
+    <span id="key-text">${secureKey}</span>
+    <button id="copy-btn">Copy</button>
+  `;
+
+  document.getElementById("copy-btn").addEventListener("click", () => {
+    navigator.clipboard.writeText(secureKey).then(() => {
+      const btn = document.getElementById("copy-btn");
+      btn.textContent = "Copied!";
+      setTimeout(() => (btn.textContent = "Copy"), 1500);
     });
   });
+} else {
+  card.textContent = "L why did you try bypass it 😝";
 }
 
-// Linkvertise check
-const allowedReferrers = ["linkvertise.com"];
-const ref = document.referrer;
-
-if (!allowedReferrers.some(site => ref.includes(site))) {
-  const card = document.querySelector(".card");
-  if (card) {
-    card.innerHTML = "L why did you try bypass it 😝";
-  }
-}
-
-// Floating watermark avoiding card
+// Watermark
 const watermark = document.getElementById("watermark");
-const card = document.querySelector(".card");
-
 let wmX = window.innerWidth / 2;
 let wmY = window.innerHeight / 4;
 let vx = 1.2;
@@ -136,7 +129,6 @@ function moveWatermark() {
   wmX += vx;
   wmY += vy;
 
-  // Bounce on edges
   if (wmX < 0 || wmX + wmRect.width > window.innerWidth) vx *= -1;
   if (wmY < 0 || wmY + wmRect.height > window.innerHeight) vy *= -1;
 
